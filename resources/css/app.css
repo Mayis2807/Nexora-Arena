@@ -1,0 +1,222 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/* ============================================
+   VARIABLES
+   ============================================ */
+:root {
+    --bg-primary: #0A0A0F;
+    --bg-surface: #12121A;
+    --bg-card: #1A1A28;
+    --color-purple: #9D50FF;
+    --color-orange: #FF7B00;
+    --color-gold: #D4AF37;
+    --color-gold-light: #F9E29B;
+    --text-muted-custom: #7A7A9A;
+}
+
+/* ============================================
+   BASE
+   ============================================ */
+body {
+    background-color: var(--bg-primary);
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+}
+
+p, span, small, label {
+    color: inherit;
+}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+.navbar {
+    background-color: var(--bg-surface) !important;
+    border-bottom: 1px solid #ffffff10;
+    padding: 0.5rem 0;
+}
+
+.navbar-brand {
+    padding: 0;
+    margin-right: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.nav-logo {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: var(--text-muted-custom) !important;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   BOTONES
+   ============================================ */
+.btn-primary-custom {
+    background-color: var(--color-purple);
+    border: none;
+    color: #ffffff !important;
+    padding: 6px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s;
+}
+
+.btn-primary-custom:hover {
+    opacity: 0.85;
+}
+
+.btn-outline-custom {
+    background: transparent;
+    border: 1px solid var(--color-purple);
+    color: var(--color-purple) !important;
+    padding: 6px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-outline-custom:hover {
+    background: var(--color-purple);
+    color: #ffffff !important;
+}
+
+.btn-orange {
+    background-color: var(--color-orange);
+    border: none;
+    color: #0A0A0F !important;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s;
+}
+
+.btn-orange:hover {
+    opacity: 0.85;
+    color: #0A0A0F !important;
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card-dark {
+    background: var(--bg-card);
+    border: 1px solid #ffffff10;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.card-dark:hover {
+    border-color: #ffffff25;
+    transform: translateY(-2px);
+}
+
+.card-dark h3 {
+    color: #ffffff;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+.badge-purple {
+    background: #9D50FF20;
+    color: var(--color-purple);
+    border: 1px solid #9D50FF40;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.badge-orange {
+    background: #FF7B0020;
+    color: var(--color-orange);
+    border: 1px solid #FF7B0040;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.badge-gold {
+    background: #D4AF3720;
+    color: var(--color-gold);
+    border: 1px solid #D4AF3740;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+/* ============================================
+   TEXTOS
+   ============================================ */
+.text-purple { color: var(--color-purple) !important; }
+.text-orange { color: var(--color-orange) !important; }
+.text-gold { color: var(--color-gold) !important; }
+.text-muted-custom { color: var(--text-muted-custom) !important; }
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    background-color: var(--bg-surface);
+    border-top: 1px solid #ffffff10;
+    color: var(--text-muted-custom);
+}
+
+/* UTILIDADES */
+.section-divider {
+    border-color: #ffffff10 !important;
+}
+
+.border-orange {
+    border: 1px solid var(--color-orange) !important;
+    box-shadow: 0 0 15px rgba(255, 123, 0, 0.2);
+}
+
+
+/* Fix contraste panel admin */
+.card-dark p,
+.card-dark h2,
+.card-dark h3,
+.card-dark div,
+.card-dark span,
+.card-dark small {
+    color: inherit;
+}
+
+.card-dark {
+    color: #ffffff;
+}
