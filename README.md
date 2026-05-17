@@ -1,58 +1,510 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Nexora Arena
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema backend desarrollado en Laravel para la gestión de eventos, reservas, compra de entradas y control de asientos dentro de una arena o recinto.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Descripción
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Nexora Arena es una API REST construida con Laravel que permite:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Gestión de eventos.
+* Administración de sectores y asientos.
+* Reserva temporal de asientos.
+* Compra de entradas.
+* Control de disponibilidad.
+* Autenticación mediante Laravel Sanctum.
+* Gestión administrativa.
+* Liberación automática de reservas expiradas.
 
-## Learning Laravel
+El proyecto está pensado como backend para aplicaciones web o móviles enfocadas en venta de entradas para conciertos, deportes, conferencias o cualquier tipo de evento con asientos numerados.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# Tecnologías utilizadas
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Backend
 
-## Agentic Development
+* PHP 8.3
+* Laravel 13
+* Laravel Sanctum
+* Eloquent ORM
+* SQLite (por defecto)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Herramientas adicionales
+
+* Composer
+* Vite
+* Docker Compose
+* Laravel Sail
+
+---
+
+# Arquitectura del proyecto
+
+El sistema está organizado siguiendo la arquitectura estándar de Laravel.
+
+## Estructura principal
 
 ```bash
-composer require laravel/boost --dev
+app/
+├── Console/
+│   └── Commands/
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│   └── Resources/
+├── Models/
+└── Services/
 
-php artisan boost:install
+database/
+├── factories/
+├── migrations/
+└── seeders/
+
+routes/
+├── api.php
+├── console.php
+└── web.php
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+# Modelos principales
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Evento
 
-## Code of Conduct
+Representa un evento disponible dentro de la plataforma.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Funciones:
 
-## Security Vulnerabilities
+* Gestionar sectores disponibles.
+* Obtener precios.
+* Relacionarse con entradas y reservas.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## Sector
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Representa una zona dentro del recinto.
+
+Ejemplos:
+
+* VIP
+* Preferencial
+* General
+
+Cada sector contiene múltiples asientos.
+
+---
+
+## Asiento
+
+Representa un asiento individual.
+
+Contiene:
+
+* Fila
+* Número
+* Estado
+* Disponibilidad por evento
+
+---
+
+## Entrada
+
+Representa una entrada comprada por un usuario.
+
+---
+
+## EstadoAsiento
+
+Controla el estado de cada asiento:
+
+* Disponible
+* Reservado
+* Comprado
+
+---
+
+## Precio
+
+Gestiona el precio de un sector dependiendo del evento.
+
+---
+
+# Servicios implementados
+
+El proyecto utiliza una capa de servicios para separar la lógica de negocio.
+
+## ReservaService
+
+Encargado de:
+
+* Crear reservas.
+* Validar disponibilidad.
+* Gestionar expiración.
+
+---
+
+## CompraService
+
+Encargado de:
+
+* Procesar compras.
+* Confirmar entradas.
+* Cambiar estados de asientos.
+
+---
+
+## LiberarReservasService
+
+Encargado de:
+
+* Liberar reservas expiradas automáticamente.
+* Restaurar disponibilidad de asientos.
+
+---
+
+# Comando Artisan personalizado
+
+El proyecto incluye un comando personalizado:
+
+```bash
+php artisan reservas:liberar
+```
+
+Este comando:
+
+* Busca reservas expiradas.
+* Libera los asientos.
+* Actualiza los estados automáticamente.
+
+Clase:
+
+```bash
+app/Console/Commands/LiberarReservasExpiradas.php
+```
+
+---
+
+# Autenticación
+
+La autenticación se realiza mediante Laravel Sanctum.
+
+Endpoints:
+
+```http
+POST /api/register
+POST /api/login
+POST /api/logout
+GET  /api/user
+```
+
+Las rutas protegidas requieren token Bearer.
+
+Ejemplo:
+
+```http
+Authorization: Bearer TU_TOKEN
+```
+
+---
+
+# Endpoints principales
+
+## Eventos
+
+### Obtener eventos
+
+```http
+GET /api/eventos
+```
+
+### Obtener evento por ID
+
+```http
+GET /api/eventos/{id}
+```
+
+---
+
+## Asientos
+
+### Obtener asientos de un evento
+
+```http
+GET /api/eventos/{eventoId}/asientos
+```
+
+### Obtener asientos por sector
+
+```http
+GET /api/eventos/{eventoId}/sectores/{sectorId}/asientos
+```
+
+---
+
+## Reservas
+
+### Obtener reservas
+
+```http
+GET /api/reservas
+```
+
+### Crear reserva
+
+```http
+POST /api/reservas
+```
+
+### Cancelar reserva
+
+```http
+DELETE /api/reservas/{id}
+```
+
+---
+
+## Compra
+
+### Procesar compra
+
+```http
+POST /api/compra
+```
+
+---
+
+## Entradas
+
+### Obtener entradas
+
+```http
+GET /api/entradas
+```
+
+### Obtener entrada específica
+
+```http
+GET /api/entradas/{id}
+```
+
+---
+
+# Rutas administrativas
+
+Las rutas administrativas requieren:
+
+* Usuario autenticado.
+* Middleware `admin`.
+
+Prefijo:
+
+```http
+/api/admin
+```
+
+Funciones:
+
+* Crear eventos.
+* Actualizar eventos.
+* Eliminar eventos.
+* Gestionar sectores.
+
+---
+
+# Instalación del proyecto
+
+## 1. Clonar repositorio
+
+```bash
+git clone https://github.com/Mayis2807/Nexora-Arena.git
+cd Nexora-Arena
+```
+
+---
+
+## 2. Instalar dependencias
+
+```bash
+composer install
+npm install
+```
+
+---
+
+## 3. Configurar entorno
+
+Copiar archivo `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Generar clave:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## 4. Configurar base de datos
+
+El proyecto incluye SQLite por defecto.
+
+Crear archivo:
+
+```bash
+touch database/database.sqlite
+```
+
+Configurar `.env`:
+
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=/ruta/completa/database/database.sqlite
+```
+
+---
+
+## 5. Ejecutar migraciones y seeders
+
+```bash
+php artisan migrate --seed
+```
+
+---
+
+## 6. Ejecutar servidor
+
+```bash
+php artisan serve
+```
+
+Servidor:
+
+```bash
+http://127.0.0.1:8000
+```
+
+---
+
+# Ejecución con Docker
+
+El proyecto incluye:
+
+* `docker-compose.yml`
+* `compose-database-server.yaml`
+
+Para iniciar:
+
+```bash
+docker compose up -d
+```
+
+---
+
+# Desarrollo
+
+Laravel incluye un script preparado:
+
+```bash
+composer run dev
+```
+
+Esto ejecuta:
+
+* Servidor Laravel.
+* Cola de trabajos.
+* Logs.
+* Vite.
+
+---
+
+# Seeders disponibles
+
+El proyecto incluye seeders para:
+
+* Usuarios
+* Eventos
+* Sectores
+* Asientos
+* Precios
+* Estados de asientos
+
+Seeder principal:
+
+```bash
+DatabaseSeeder
+```
+
+---
+
+# Recursos API
+
+El sistema utiliza API Resources de Laravel:
+
+* EventoResource
+* AsientoResource
+* SectorResource
+* EntradaResource
+* ReservaResource
+* PrecioResource
+* UserResource
+
+Esto permite:
+
+* Estandarizar respuestas.
+* Ocultar datos sensibles.
+* Mejorar serialización JSON.
+
+---
+
+# Middleware personalizado
+
+## IsAdmin
+
+Middleware encargado de validar si el usuario posee permisos administrativos.
+
+Ubicación:
+
+```bash
+app/Http/Middleware/IsAdmin.php
+```
+
+---
+
+# Posibles mejoras futuras
+
+* Integración con pasarela de pagos.
+* WebSockets para actualización en tiempo real.
+* QR para entradas.
+* Panel administrativo frontend.
+* Reportes y analíticas.
+* Notificaciones por correo.
+* Sistema de reembolsos.
+
+---
+
+# Estado del proyecto
+
+Proyecto funcional en desarrollo activo.
+
+---
+
+# Autor
+
+Desarrollado por:
+
+```bash
+Mayis2807
+```
+
+GitHub:
+
+```bash
+https://github.com/Mayis2807
+```
