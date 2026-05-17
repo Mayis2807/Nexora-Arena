@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: 'mysql:8.4'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'RootPass2024!Secure'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'nexora_arena'
+      MYSQL_USER: 'nexora_user'
+      MYSQL_PASSWORD: 'NexoraPass2024!Student'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 0
+    volumes:
+      - 'mysql_data:/var/lib/mysql'
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - '-pNexoraPass2024!Student'
+      retries: 3
+      timeout: 5s
+
+  phpmyadmin:
+    image: 'phpmyadmin:latest'
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: 'nexora_user'
+      PMA_PASSWORD: 'NexoraPass2024!Student'
+      UPLOAD_LIMIT: 300M
+    restart: unless-stopped
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
+    driver: local

@@ -49,6 +49,13 @@
                     </a>
                 </li>
                 @endif
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('experiencia.*') ? 'active' : '' }}"
+                       href="{{ route('experiencia.index') }}">
+                        <i class="bi bi-star me-1"></i>Mi experiencia
+                    </a>
+                </li>
                 @endauth
             </ul>
 

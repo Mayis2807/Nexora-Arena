@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Asiento;
 use App\Models\Evento;
+use App\Models\Sector;
 use App\Models\EstadoAsiento;
 use Illuminate\Database\Seeder;
 
@@ -14,43 +15,52 @@ class EstadoAsientoSeeder extends Seeder
         $evento = Evento::first();
         if (!$evento) return;
 
-        $sectores = \App\Models\Sector::all();
+        $sectores = Sector::all();
         $total = $sectores->count();
         $mitad = (int) ceil($total / 2);
+        $now = now();
+        $batch = [];
+
+        // Cargar todos los asientos de una sola query con su sector_id
+        $asientosPorSector = Asiento::all()->groupBy('sector_id');
 
         foreach ($sectores as $index => $sector) {
-            if ($index < $mitad) {
-                // Primera mitad — variedad de ocupación
-                $porcentaje = match($index % 4) {
-                    0 => 100, // Lleno
-                    1 => 85,  // Casi lleno
-                    2 => 15,  // Pocas entradas
-                    3 => 50,  // Mitad
-                };
-                $this->llenarSector($evento->id, $sector->nombre, $porcentaje);
+            if ($index >= $mitad) continue;
+
+            $porcentaje = match($index % 4) {
+                0 => 100,
+                1 => 85,
+                2 => 15,
+                3 => 50,
+            };
+
+            $asientos = $asientosPorSector->get($sector->id, collect());
+            if ($asientos->isEmpty()) continue;
+
+            $cantidad = (int) ceil($asientos->count() * $porcentaje / 100);
+
+            foreach ($asientos->take($cantidad) as $asiento) {
+                $batch[] = [
+                    'evento_id'      => $evento->id,
+                    'asiento_id'     => $asiento->id,
+                    'estado'         => 'vendido',
+                    'user_id'        => null,
+                    'reservado_hasta'=> null,
+                    'created_at'     => $now,
+                    'updated_at'     => $now,
+                ];
+
+                if (count($batch) >= 1000) {
+                    EstadoAsiento::insert($batch);
+                    $batch = [];
+                }
             }
-            // Segunda mitad — libres (no hacemos nada)
+
+            $this->command->info("  → {$sector->nombre}: {$cantidad}/{$asientos->count()} asientos ocupados ({$porcentaje}%)");
         }
 
-    }
-
-    private function llenarSector($eventoId, $nombreSector, $porcentaje)
-    {
-        $asientos = Asiento::whereHas('sector', fn($q) => $q->where('nombre', $nombreSector))
-            ->get();
-
-        if ($asientos->isEmpty()) return;
-
-        $cantidad = (int) ceil($asientos->count() * $porcentaje / 100);
-        $asientosALlenar = $asientos->take($cantidad);
-
-        foreach ($asientosALlenar as $asiento) {
-            EstadoAsiento::firstOrCreate(
-                ['evento_id' => $eventoId, 'asiento_id' => $asiento->id],
-                ['estado' => 'vendido', 'user_id' => null]
-            );
+        if (!empty($batch)) {
+            EstadoAsiento::insert($batch);
         }
-
-        $this->command->info("  → {$nombreSector}: {$cantidad}/{$asientos->count()} asientos ocupados ({$porcentaje}%)");
     }
 }

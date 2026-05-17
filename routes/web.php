@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\EntradaWebController;
 use App\Http\Controllers\Web\ReservaWebController;
 use App\Http\Controllers\Web\CompraWebController;
 use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\ExperienciaController;
 
 
 // Página principal
@@ -36,6 +37,10 @@ Route::middleware('auth')->group(function () {
     // Compra
     Route::post('/compra', [CompraWebController::class, 'store'])->name('compra.store');
     Route::get('/compra/confirmacion', [CompraWebController::class, 'confirmacion'])->name('compra.confirmacion');
+
+    // Experiencia
+    Route::get('/mi-experiencia', [ExperienciaController::class, 'index'])->name('experiencia.index');
+    Route::post('/mi-experiencia', [ExperienciaController::class, 'store'])->name('experiencia.store');
 });
 
 
