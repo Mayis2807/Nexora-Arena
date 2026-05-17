@@ -1,5 +1,7 @@
 # Nexora Arena
 
+![Texto alternativo](public/imagenes/nexora-arena1.png)
+
 Sistema backend desarrollado en Laravel para la gestión de eventos, reservas, compra de entradas y control de asientos dentro de una arena o recinto.
 
 ---
@@ -481,7 +483,6 @@ app/Http/Middleware/IsAdmin.php
 
 * Integración con pasarela de pagos.
 * WebSockets para actualización en tiempo real.
-* QR para entradas.
 * Panel administrativo frontend.
 * Reportes y analíticas.
 * Notificaciones por correo.
