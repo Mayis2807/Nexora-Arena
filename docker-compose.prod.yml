@@ -1,0 +1,133 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: http://54.226.167.18:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: nexora_arena
+      DB_USERNAME: nexora_user
+      DB_PASSWORD: NexoraPass2024!Student
+      APP_KEY: ${APP_KEY}
+    volumes:
+      - ./storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - nexora
+
+  mysql:
+    image: 'mysql:8.4'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'RootPass2024!Secure'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'nexora_arena'
+      MYSQL_USER: 'nexora_user'
+      MYSQL_PASSWORD: 'NexoraPass2024!Student'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-pNexoraPass2024!Student"]
+      retries: 5
+      timeout: 5s
+      interval: 5s
+    networks:
+      - nexora
+
+  phpmyadmin:
+    image: 'phpmyadmin:latest'
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: nexora_user
+      PMA_PASSWORD: NexoraPass2024!Student
+    depends_on:
+      - mysql
+    networks:
+      - nexora
+
+networks:
+  nexora:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: localservices:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_URL: http://54.226.167.18:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: nexora_arena
+      DB_USERNAME: nexora_user
+      DB_PASSWORD: NexoraPass2024!Student
+      APP_KEY: ${APP_KEY}
+    volumes:
+      - ./storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - nexora
+
+  mysql:
+    image: 'mysql:8.4'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'RootPass2024!Secure'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'nexora_arena'
+      MYSQL_USER: 'nexora_user'
+      MYSQL_PASSWORD: 'NexoraPass2024!Student'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-pNexoraPass2024!Student"]
+      retries: 5
+      timeout: 5s
+      interval: 5s
+    networks:
+      - nexora
+
+  phpmyadmin:
+    image: 'phpmyadmin:latest'
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: nexora_user
+      PMA_PASSWORD: NexoraPass2024!Student
+    depends_on:
+      - mysql
+    networks:
+      - nexora
+
+networks:
+  nexora:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
