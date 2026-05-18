@@ -17,7 +17,7 @@ class EstadoAsientoSeeder extends Seeder
 
         $sectores = Sector::all();
         $total = $sectores->count();
-        $mitad = (int) ceil($total / 2);
+        $mitad = (int) ceil($total / 4);
         $now = now();
         $batch = [];
 
