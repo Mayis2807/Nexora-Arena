@@ -38,7 +38,7 @@ services:
       - mysql_data:/var/lib/mysql
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-pNexoraPass2024!Student"]
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
       retries: 5
       timeout: 5s
       interval: 5s
