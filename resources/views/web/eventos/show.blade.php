@@ -364,5 +364,18 @@ document.querySelectorAll('.sector-card').forEach(card => {
         card.style.borderColor = '#FF7B0040';
     }
 });
+
+// Recargar asientos cada 30 segundos si hay un sector seleccionado
+setInterval(() => {
+    if (sectorSeleccionado && eventoId) {
+        fetch(`/api/eventos/${eventoId}/sectores/${sectorSeleccionado}/asientos`, {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            renderAsientos(data.data.asientos);
+        });
+    }
+}, 30000);
 </script>
 @endsection
