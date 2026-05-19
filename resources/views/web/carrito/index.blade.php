@@ -126,6 +126,8 @@
 @section('scripts')
 <script>
 function actualizarTimers() {
+    let hayExpirado = false;
+
     document.querySelectorAll('[data-expira]').forEach(el => {
         const expira = new Date(el.dataset.expira);
         const ahora = new Date();
@@ -134,7 +136,7 @@ function actualizarTimers() {
         if (diff <= 0) {
             el.textContent = 'Expirado';
             el.style.color = '#ff6b6b';
-            setTimeout(() => location.reload(), 2000);
+            hayExpirado = true;
         } else {
             const min = Math.floor(diff / 60).toString().padStart(2, '0');
             const seg = (diff % 60).toString().padStart(2, '0');
@@ -142,9 +144,14 @@ function actualizarTimers() {
             if (diff < 120) el.style.color = '#ff6b6b';
         }
     });
+
+    if (hayExpirado) {
+        clearInterval(intervalo);
+        setTimeout(() => location.reload(), 2000);
+    }
 }
 
+const intervalo = setInterval(actualizarTimers, 1000);
 actualizarTimers();
-setInterval(actualizarTimers, 1000);
 </script>
 @endsection
