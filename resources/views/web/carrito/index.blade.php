@@ -10,7 +10,7 @@
     <div class="mb-5">
         <span class="badge-purple mb-2 d-inline-block">Mi carrito</span>
         <h1 style="font-size: 2.5rem; font-weight: 700;">Carrito de reservas</h1>
-        <p class="text-muted-custom">Tienes 30 minutos para completar tu compra</p>
+        <p class="text-muted-custom">Tienes 10 minutos para completar tu compra</p>
     </div>
 
     {{-- Mensajes --}}

@@ -35,6 +35,16 @@
             </div>
             @endif
 
+            {{-- Aviso general si hay errores --}}
+            @if($errors->any())
+            <div style="background: #ff000015; border: 1px solid #ff000040; border-radius: 12px; padding: 16px;" class="mb-4">
+                <p class="mb-0 small" style="color: #ff6b6b;">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    Por favor completa los campos marcados en rojo antes de enviar.
+                </p>
+            </div>
+            @endif
+
             @if($yaRespondio)
             {{-- Ya respondió --}}
             <div class="card-dark p-5 text-center">
@@ -52,9 +62,12 @@
                 @csrf
 
                 {{-- 1. Valoración web (estrellas) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('valoracion_web') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">01.</span> ¿Cómo valorarías tu experiencia navegando la web?
+                        @if($errors->has('valoracion_web'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Selecciona del 1 al 5</p>
 
@@ -64,7 +77,10 @@
                             <input type="radio" name="valoracion_web" value="{{ $i }}"
                                    class="d-none estrella-input" {{ old('valoracion_web') == $i ? 'checked' : '' }}>
                             <div class="estrella-btn" data-valor="{{ $i }}"
-                                 style="width: 55px; height: 55px; border-radius: 12px; background: #ffffff10; border: 1px solid #ffffff20; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: all 0.2s; cursor: pointer;">
+                                 style="width: 55px; height: 55px; border-radius: 12px;
+                                        background: {{ old('valoracion_web') >= $i ? '#F5C40030' : '#ffffff10' }};
+                                        border: 1px solid {{ old('valoracion_web') >= $i ? '#F5C40060' : '#ffffff20' }};
+                                        display: flex; align-items: center; justify-content: center; font-size: 1.5rem; transition: all 0.2s; cursor: pointer;">
                                 ⭐
                             </div>
                             <div class="small text-muted-custom mt-1">{{ $i }}</div>
@@ -72,14 +88,17 @@
                         @endfor
                     </div>
                     @error('valoracion_web')
-                    <p class="text-center mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="text-center mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- 2. Secciones visitadas (checkboxes) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('secciones_visitadas') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">02.</span> ¿Qué secciones de la web visitaste?
+                        @if($errors->has('secciones_visitadas'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Selecciona todas las que apliquen</p>
 
@@ -98,20 +117,22 @@
                         @endforeach
                     </div>
                     @error('secciones_visitadas')
-                    <p class="mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- 3. Eventos de interés (select múltiple) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('eventos_interes') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">03.</span> ¿Qué tipo de eventos te interesan más?
+                        @if($errors->has('eventos_interes'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Puedes seleccionar varios</p>
 
                     <select name="eventos_interes[]" multiple
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 10px; padding: 10px 14px; color: #ffffff; outline: none; min-height: 140px;"
-                            >
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('eventos_interes') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 10px; padding: 10px 14px; color: #ffffff; outline: none; min-height: 140px;">
                         @foreach(['Conciertos de rock', 'Música electrónica', 'Bachata y salsa', 'Baloncesto', 'Fútbol', 'Boxeo y MMA', 'Teatro y ópera', 'Comedia y shows', 'Eventos familiares', 'Experiencias inmersivas'] as $evento)
                         <option value="{{ $evento }}"
                                 style="padding: 6px; background: #1A1A28;"
@@ -124,20 +145,23 @@
                         <i class="bi bi-info-circle me-1"></i>Mantén Ctrl (Windows) o Cmd (Mac) para seleccionar varios
                     </p>
                     @error('eventos_interes')
-                    <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-1 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- 4. Cómo nos encontraste (select simple) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('como_nos_encontraste') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">04.</span> ¿Cómo nos encontraste?
+                        @if($errors->has('como_nos_encontraste'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Selecciona una opción</p>
 
                     <select name="como_nos_encontraste"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 10px; padding: 10px 14px; color: #ffffff; outline: none;">
-                        <option value="" disabled selected style="background: #1A1A28;">-- Selecciona una opción --</option>
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('como_nos_encontraste') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 10px; padding: 10px 14px; color: #ffffff; outline: none;">
+                        <option value="" disabled {{ old('como_nos_encontraste') ? '' : 'selected' }} style="background: #1A1A28;">-- Selecciona una opción --</option>
                         @foreach(['Redes sociales', 'Google / Buscador', 'Recomendación de un amigo', 'Publicidad online', 'Radio o televisión', 'Cartel o publicidad física', 'Ya conocía el arena', 'Otro'] as $opcion)
                         <option value="{{ $opcion }}" style="background: #1A1A28;"
                                 {{ old('como_nos_encontraste') == $opcion ? 'selected' : '' }}>
@@ -146,14 +170,17 @@
                         @endforeach
                     </select>
                     @error('como_nos_encontraste')
-                    <p class="mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- 5. ¿Recomendarías? (radio) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('recomendaria') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">05.</span> ¿Recomendarías Nexora Arena a un amigo?
+                        @if($errors->has('recomendaria'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Sé honesto/a</p>
 
@@ -161,7 +188,7 @@
                         <label style="flex: 1; cursor: pointer;">
                             <input type="radio" name="recomendaria" value="1" class="d-none"
                                    {{ old('recomendaria') == '1' ? 'checked' : '' }}>
-                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid #ffffff20; transition: all 0.2s;">
+                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid {{ old('recomendaria') == '1' ? '#9D50FF' : '#ffffff20' }}; background: {{ old('recomendaria') == '1' ? '#9D50FF15' : 'transparent' }}; transition: all 0.2s;">
                                 <div style="font-size: 2rem;">👍</div>
                                 <div class="small mt-1">Sí, lo recomendaría</div>
                             </div>
@@ -169,21 +196,24 @@
                         <label style="flex: 1; cursor: pointer;">
                             <input type="radio" name="recomendaria" value="0" class="d-none"
                                    {{ old('recomendaria') == '0' ? 'checked' : '' }}>
-                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid #ffffff20; transition: all 0.2s;">
+                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid {{ old('recomendaria') == '0' ? '#9D50FF' : '#ffffff20' }}; background: {{ old('recomendaria') == '0' ? '#9D50FF15' : 'transparent' }}; transition: all 0.2s;">
                                 <div style="font-size: 2rem;">👎</div>
                                 <div class="small mt-1">No lo recomendaría</div>
                             </div>
                         </label>
                     </div>
                     @error('recomendaria')
-                    <p class="mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- 6. ¿Qué mejorarías? (select múltiple checkboxes) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('mejoras') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">06.</span> ¿Qué mejorarías de la web?
+                        @if($errors->has('mejoras'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Selecciona todas las que apliquen</p>
 
@@ -202,33 +232,34 @@
                         @endforeach
                     </div>
                     @error('mejoras')
-                    <p class="mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
-                {{-- 7. Comentario (textarea) --}}
+                {{-- 7. Comentario (textarea) — opcional, no lleva error --}}
                 <div class="card-dark p-4 mb-4">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">07.</span> Cuéntanos tu experiencia en el arena
+                        <span class="text-muted-custom" style="font-size: 0.8rem; font-weight: 400;"> — Opcional</span>
                     </h3>
-                    <p class="text-muted-custom small mb-3">Comparte anécdotas, momentos especiales o cualquier comentario (opcional)</p>
+                    <p class="text-muted-custom small mb-3">Comparte anécdotas, momentos especiales o cualquier comentario</p>
 
                     <textarea name="comentario" rows="5"
                               style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 10px; padding: 12px 14px; color: #ffffff; outline: none; resize: vertical;"
-                              placeholder="Ej: Fui al concierto de Aventura y fue una experiencia increíble. El sonido era perfecto y la visibilidad desde mi sector era excelente..."
+                              placeholder="Ej: Fui al concierto de Aventura y fue una experiencia increíble..."
                               maxlength="1000">{{ old('comentario') }}</textarea>
                     <div class="text-end">
                         <span class="text-muted-custom" style="font-size: 0.75rem;">Máximo 1000 caracteres</span>
                     </div>
-                    @error('comentario')
-                    <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 {{-- 8. ¿Volverías a comprar? (radio) --}}
-                <div class="card-dark p-4 mb-4">
+                <div class="card-dark p-4 mb-4" style="{{ $errors->has('volveria_comprar') ? 'border: 1px solid #ff6b6b;' : '' }}">
                     <h3 style="font-size: 1.1rem; font-weight: 600;" class="mb-1">
                         <span class="text-purple">08.</span> ¿Volverías a comprar entradas en nuestra web?
+                        @if($errors->has('volveria_comprar'))
+                            <span style="color: #ff6b6b; font-size: 0.8rem; font-weight: 400;"> — Obligatorio</span>
+                        @endif
                     </h3>
                     <p class="text-muted-custom small mb-3">Tu respuesta es importante para nosotros</p>
 
@@ -237,7 +268,7 @@
                         <label style="flex: 1; cursor: pointer;">
                             <input type="radio" name="volveria_comprar" value="{{ $valor }}" class="d-none"
                                    {{ old('volveria_comprar') == $valor ? 'checked' : '' }}>
-                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid #ffffff20; transition: all 0.2s;">
+                            <div class="opcion-radio text-center p-3" style="border-radius: 12px; border: 1px solid {{ old('volveria_comprar') == $valor ? '#9D50FF' : '#ffffff20' }}; background: {{ old('volveria_comprar') == $valor ? '#9D50FF15' : 'transparent' }}; transition: all 0.2s;">
                                 <div style="font-size: 2rem;">{{ $opcion['emoji'] }}</div>
                                 <div class="small mt-1">{{ $opcion['texto'] }}</div>
                             </div>
@@ -245,7 +276,7 @@
                         @endforeach
                     </div>
                     @error('volveria_comprar')
-                    <p class="mt-2 small" style="color: #ff6b6b;">{{ $message }}</p>
+                    <p class="mt-2 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 

@@ -32,44 +32,59 @@
                 <form action="{{ route('register') }}" method="POST">
                     @csrf
 
-                    {{-- Nombre y Apellido --}}
-                    <div class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="small text-muted-custom mb-1">Nombre</label>
-                            <input type="text" name="nombre" value="{{ old('nombre') }}"
-                                style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
-                                placeholder="Juan" required>
-                        </div>
-                        <div class="col-6">
-                            <label class="small text-muted-custom mb-1">Apellido</label>
-                            <input type="text" name="apellido" value="{{ old('apellido') }}"
-                                style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
-                                placeholder="García" required>
-                        </div>
+                    {{-- Nombre --}}
+                    <div class="col-6">
+                        <label class="small text-muted-custom mb-1">Nombre</label>
+                        <input type="text" name="nombre" value="{{ old('nombre') }}"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('nombre') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            placeholder="Juan" required>
+                        @error('nombre')
+                        <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                        @enderror
                     </div>
-
+                    
+                    {{-- Apellido --}}
+                    <div class="col-6">
+                        <label class="small text-muted-custom mb-1">Apellido</label>
+                        <input type="text" name="apellido" value="{{ old('apellido') }}"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('apellido') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            placeholder="García" required>
+                        @error('apellido')
+                        <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
                     {{-- Email --}}
                     <div class="mb-3">
                         <label class="small text-muted-custom mb-1">Email</label>
                         <input type="email" name="email" value="{{ old('email') }}"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('email') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
                             placeholder="tu@email.com" required>
+                        @error('email')
+                        <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                        @enderror
                     </div>
-
+                    
                     {{-- Password --}}
                     <div class="mb-3">
                         <label class="small text-muted-custom mb-1">Contraseña</label>
                         <input type="password" name="password"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('password') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
                             placeholder="Mínimo 8 caracteres" required>
+                        @error('password')
+                        <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                        @enderror
                     </div>
-
+                    
                     {{-- Confirmar Password --}}
                     <div class="mb-4">
                         <label class="small text-muted-custom mb-1">Confirmar contraseña</label>
                         <input type="password" name="password_confirmation"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('password_confirmation') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
                             placeholder="Repite la contraseña" required>
+                        @error('password_confirmation')
+                        <p class="mt-1 small" style="color: #ff6b6b;">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Pregunta anti-bot --}}

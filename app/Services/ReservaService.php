@@ -36,7 +36,7 @@ class ReservaService
                 'asiento_id' => $asientoId,
                 'user_id' => $userId,
                 'estado' => 'bloqueado',
-                'reservado_hasta' => now()->addMinutes(30),
+                'reservado_hasta' => now()->addMinutes(10),
             ]);
 
             DB::commit();

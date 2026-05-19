@@ -36,16 +36,22 @@
                     <div class="mb-3">
                         <label class="small text-muted-custom mb-1">Email</label>
                         <input type="email" name="email" value="{{ old('email') }}"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('email') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
                             placeholder="tu@email.com" required>
+                        @error('email')
+                        <p class="mt-1 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
+                        @enderror
                     </div>
-
+                    
                     {{-- Password --}}
                     <div class="mb-4">
                         <label class="small text-muted-custom mb-1">Contraseña</label>
                         <input type="password" name="password"
-                            style="width: 100%; background: #0A0A0F; border: 1px solid #ffffff20; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
+                            style="width: 100%; background: #0A0A0F; border: 1px solid {{ $errors->has('password') ? '#ff6b6b' : '#ffffff20' }}; border-radius: 8px; padding: 10px 14px; color: #ffffff; outline: none;"
                             placeholder="••••••••" required>
+                        @error('password')
+                        <p class="mt-1 small" style="color: #ff6b6b;"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Submit --}}

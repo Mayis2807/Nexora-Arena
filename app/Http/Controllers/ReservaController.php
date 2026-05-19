@@ -24,7 +24,7 @@ class ReservaController extends Controller
             );
 
             return (new ReservaResource($reserva))
-                ->additional(['message' => 'Asiento reservado por 15 minutos'])
+                ->additional(['message' => 'Asiento reservado por 30 minutos'])
                 ->response()
                 ->setStatusCode(201);
             

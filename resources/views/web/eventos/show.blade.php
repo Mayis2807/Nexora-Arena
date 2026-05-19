@@ -284,7 +284,7 @@ async function reservarAsientos() {
     @auth
     if (asientosSeleccionados.length === 0) return;
 
-    if (!confirm(`¿Reservar ${asientosSeleccionados.length} asiento(s)? Tendrás 30 minutos para completar la compra.`)) return;
+    if (!confirm(`¿Reservar ${asientosSeleccionados.length} asiento(s)? Tendrás 10 minutos para completar la compra.`)) return;
 
     const btnReservar = document.getElementById('btn-reservar');
     btnReservar.textContent = 'Reservando...';
