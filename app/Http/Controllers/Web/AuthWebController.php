@@ -108,9 +108,7 @@ class AuthWebController extends Controller
             return redirect()->intended(route('home'));
         }
 
-        return back()->withInput()->withErrors([
-            'email' => 'Las credenciales no son correctas.',
-        ]);
+        return back()->withInput()->with('error', 'Las credenciales no son correctas.');
     }
 
     public function showRegister()

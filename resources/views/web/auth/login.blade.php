@@ -19,13 +19,11 @@
             <div class="card-dark p-4">
 
                 {{-- Errores --}}
-                @if($errors->any())
+                @if(session('error'))
                 <div style="background: #ff000020; border: 1px solid #ff000040; border-radius: 8px; padding: 12px 16px;" class="mb-4">
-                    @foreach($errors->all() as $error)
                     <p class="mb-0 small" style="color: #ff6b6b;">
-                        <i class="bi bi-exclamation-circle me-1"></i>{{ $error }}
+                        <i class="bi bi-exclamation-circle me-1"></i>{{ session('error') }}
                     </p>
-                    @endforeach
                 </div>
                 @endif
 
